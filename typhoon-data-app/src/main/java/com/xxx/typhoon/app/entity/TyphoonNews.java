@@ -30,7 +30,7 @@ public class TyphoonNews implements Serializable {
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     @ExcelIgnore
-    private Long id;
+    private Long typhoonId;
 
     @TableField("publish_time")
     @ExcelProperty("publishTime")
@@ -80,5 +80,7 @@ public class TyphoonNews implements Serializable {
     @ExcelProperty("like_um")
     private Integer likeNum;
 
+    @TableField("typhoon_name")
+    private String typhoonName;
 
 }

@@ -2,6 +2,7 @@ package com.xxx.typhoon.app.service.impl;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
@@ -51,8 +52,8 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
     FileUtil fileUtil;
 
     @Override
-    public CommonResult readCSV(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
+    public CommonResult readCSV(MultipartFile csvFile) {
+        String originalFilename = csvFile.getOriginalFilename();
         StringBuilder sb = new StringBuilder();
         String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
 
@@ -61,7 +62,7 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
             CSVFileService fileService = new CSVFileService();
             List<TyphoonNews> insertList = new ArrayList<>();
             try {
-                Iterator<String[]> iterator = fileService.readCSV(fileUtil.multipartFileToFile(file));
+                Iterator<String[]> iterator = fileService.readCSV(fileUtil.multipartFileToFile(csvFile));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 iterator.next();
                 while (iterator.hasNext()) {
@@ -134,6 +135,23 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
         }
 
         return null;
+    }
+
+    @Override
+    public List<String> getTyphoonNameDataList() {
+        QueryWrapper wrapper=new QueryWrapper();
+
+        wrapper.select("typhoon_name");
+        wrapper.select("DISTINCT typhoon_name");
+
+        return typhoonNewsMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<TyphoonNews> getTyphoonDataByName(String typhoonName) {
+        QueryWrapper wrapper=new QueryWrapper();
+        wrapper.eq("typhoon_name",typhoonName);
+        return typhoonNewsMapper.selectList(wrapper);
     }
 }
 
