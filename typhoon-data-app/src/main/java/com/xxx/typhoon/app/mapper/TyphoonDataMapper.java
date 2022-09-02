@@ -1,6 +1,6 @@
 package com.xxx.typhoon.app.mapper;
 
-import com.xxx.typhoon.app.entity.TyphoonNews;
+import com.xxx.typhoon.app.entity.TyphoonData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2022-08-31
  */
 @Mapper
-public interface TyphoonNewsMapper extends BaseMapper<TyphoonNews> {
+public interface TyphoonDataMapper extends BaseMapper<TyphoonData> {
 
 }

@@ -23,14 +23,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("typhoon_news")
-public class TyphoonNews implements Serializable {
+@TableName("typhoon_data")
+public class TyphoonData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "typhoon_data_id", type = IdType.ASSIGN_ID)
     @ExcelIgnore
-    private Long typhoonId;
+    private Long typhoonDataId;
 
     @TableField("publish_time")
     @ExcelProperty("publishTime")

@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
 import com.xxx.tphoon.fileOperation.service.CSVFileService;
-import com.xxx.typhoon.app.entity.TyphoonNews;
+import com.xxx.typhoon.app.entity.TyphoonData;
 import com.xxx.typhoon.app.lisenner.ExcelListener;
-import com.xxx.typhoon.app.mapper.TyphoonNewsMapper;
-import com.xxx.typhoon.app.service.TyphoonNewsService;
+import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
+import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +28,7 @@ import java.util.*;
  * @since 2022-08-31
  */
 @Service
-public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, TyphoonNews> implements TyphoonNewsService {
+public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, TyphoonData> implements TyphoonDataService {
 
     /**
      * Excel 2007+
@@ -46,7 +46,7 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
     private static final String CSV = "csv";
 
     @Autowired
-    TyphoonNewsMapper typhoonNewsMapper;
+    TyphoonDataMapper typhoonNewsMapper;
 
     @Autowired
     FileUtil fileUtil;
@@ -60,14 +60,14 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
         if (fileSuffix.equals(CSV)) {
 
             CSVFileService fileService = new CSVFileService();
-            List<TyphoonNews> insertList = new ArrayList<>();
+            List<TyphoonData> insertList = new ArrayList<>();
             try {
                 Iterator<String[]> iterator = fileService.readCSV(fileUtil.multipartFileToFile(csvFile));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 iterator.next();
                 while (iterator.hasNext()) {
                     Object[] objects = Arrays.stream(iterator.next()).toArray();
-                    TyphoonNews news = new TyphoonNews();
+                    TyphoonData news = new TyphoonData();
                     Date date = sdf.parse((String) objects[1]);
                     news.setPublishTime(date);
                     news.setUserName((String) objects[2]);
@@ -116,7 +116,7 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
             }
             List<JSONObject> dataList = excelListener.getDataList();
             for (JSONObject jsonObject : dataList) {
-                TyphoonNews news = new TyphoonNews();
+                TyphoonData news = new TyphoonData();
                 news.setPublishTime(jsonObject.getDate("publish_time"));
                 news.setUserName(jsonObject.getString("user_name"));
                 news.setUserLink(jsonObject.getString("user_link"));
@@ -148,7 +148,7 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
     }
 
     @Override
-    public List<TyphoonNews> getTyphoonDataByName(String typhoonName) {
+    public List<TyphoonData> getTyphoonDataByName(String typhoonName) {
         QueryWrapper wrapper=new QueryWrapper();
         wrapper.eq("typhoon_name",typhoonName);
         return typhoonNewsMapper.selectList(wrapper);

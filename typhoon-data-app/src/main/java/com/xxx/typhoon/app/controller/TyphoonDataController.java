@@ -1,8 +1,8 @@
 package com.xxx.typhoon.app.controller;
 
 import com.xxx.common.result.CommonResult;
-import com.xxx.typhoon.app.entity.TyphoonNews;
-import com.xxx.typhoon.app.service.TyphoonNewsService;
+import com.xxx.typhoon.app.entity.TyphoonData;
+import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +22,11 @@ import java.util.List;
  * @since 2022-08-31
  */
 @RestController
-@RequestMapping("/typhoonNews")
-public class TyphoonNewsController {
+@RequestMapping("/typhoonData")
+public class TyphoonDataController {
 
     @Autowired
-    TyphoonNewsService typhoonNewsService;
+    TyphoonDataService typhoonNewsService;
 
     @PostMapping("/readExcel")
     @Async
@@ -48,7 +48,7 @@ public class TyphoonNewsController {
     @GetMapping("/getTyphoonDataByName")
     @Async
     public CommonResult getTyphoonDataByName(String name){
-        CommonResult<List<TyphoonNews>> result=new CommonResult<>();
+        CommonResult<List<TyphoonData>> result=new CommonResult<>();
         result.setData(typhoonNewsService.getTyphoonDataByName(name));
         result.setCode(200);
         result.setMessage("获取成功");

@@ -1,7 +1,7 @@
 package com.xxx.typhoon.app.service;
 
 import com.xxx.common.result.CommonResult;
-import com.xxx.typhoon.app.entity.TyphoonNews;
+import com.xxx.typhoon.app.entity.TyphoonData;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author 
  * @since 2022-08-31
  */
-public interface TyphoonNewsService extends IService<TyphoonNews> {
+public interface TyphoonDataService extends IService<TyphoonData> {
 
     /**
      * 读取CSV文件并存入数据库
@@ -42,6 +42,6 @@ public interface TyphoonNewsService extends IService<TyphoonNews> {
      * @param typhoonName
      * @return
      */
-    List<TyphoonNews> getTyphoonDataByName(String typhoonName);
+    List<TyphoonData> getTyphoonDataByName(String typhoonName);
 
 }
