@@ -1,8 +1,12 @@
 package com.xxx.common.util;
 
+import com.xxx.tphoon.fileOperation.exception.FileTypeException;
+import com.xxx.tphoon.fileOperation.service.CSVFileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Iterator;
 
 /**
  * @Author
@@ -12,8 +16,26 @@ import java.io.*;
  * @Description: TODO
  * @Version 1.0
  */
-public class FileUtil {
+public class FileUtil<T> {
 
+    /**
+     * Excel 2007+
+     */
+    public static final String EXCEL_2007 = "xlsx";
+
+    /**
+     * Excel 2003
+     */
+    private static final String EXCEL_2003 = "xls";
+
+    /**
+     * CSV
+     */
+    private static final String CSV = "csv";
+
+    private CSVFileService csvFileService=new CSVFileService();
+
+//    private ExcelListener excelListener = new ExcelListener();
 
     public File multipartFileToFile(MultipartFile file) throws Exception {
         File toFile = null;
@@ -44,4 +66,19 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+
+
+    public Iterator<String[]> readCSVFile(File csvFile) throws FileTypeException {
+        String originalFilename = csvFile.getName();
+        StringBuilder sb = new StringBuilder();
+        String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
+
+        if (fileSuffix.equals(CSV)){
+            Iterator<String[]> iterator = csvFileService.readCSV(csvFile);
+            return iterator;
+        }else {
+            throw new FileTypeException();
+        }
+    }
+
 }

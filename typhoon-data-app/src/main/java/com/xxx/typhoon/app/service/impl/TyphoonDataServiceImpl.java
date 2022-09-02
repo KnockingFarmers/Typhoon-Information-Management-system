@@ -33,7 +33,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     /**
      * Excel 2007+
      */
-    private static final String EXCEL_2007 = "xlsx";
+    public static final String EXCEL_2007 = "xlsx";
 
     /**
      * Excel 2003
@@ -59,10 +59,10 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
         if (fileSuffix.equals(CSV)) {
 
-            CSVFileService fileService = new CSVFileService();
+            CSVFileService csvService = new CSVFileService();
             List<TyphoonData> insertList = new ArrayList<>();
             try {
-                Iterator<String[]> iterator = fileService.readCSV(fileUtil.multipartFileToFile(csvFile));
+                Iterator<String[]> iterator = csvService.readCSV(fileUtil.multipartFileToFile(csvFile));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 iterator.next();
                 while (iterator.hasNext()) {
