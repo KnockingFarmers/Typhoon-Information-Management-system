@@ -1,21 +1,17 @@
 package com.xxx.typhoon.app.service.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
-import com.xxx.tphoon.fileOperation.service.CSVFileService;
 import com.xxx.typhoon.app.entity.TyphoonData;
-import com.xxx.typhoon.app.lisenner.ExcelListener;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -46,56 +42,55 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     private static final String CSV = "csv";
 
     @Autowired
-    TyphoonDataMapper typhoonNewsMapper;
+    TyphoonDataMapper typhoonDataMapper;
 
     @Autowired
     FileUtil fileUtil;
 
     @Override
     public CommonResult readCSV(MultipartFile csvFile) {
-        String originalFilename = csvFile.getOriginalFilename();
-        StringBuilder sb = new StringBuilder();
-        String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
 
-        if (fileSuffix.equals(CSV)) {
+        List<TyphoonData> insertList = new ArrayList<>();
+        File file = null;
+        try {
 
-            CSVFileService csvService = new CSVFileService();
-            List<TyphoonData> insertList = new ArrayList<>();
-            try {
-                Iterator<String[]> iterator = csvService.readCSV(fileUtil.multipartFileToFile(csvFile));
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                iterator.next();
-                while (iterator.hasNext()) {
-                    Object[] objects = Arrays.stream(iterator.next()).toArray();
-                    TyphoonData news = new TyphoonData();
-                    Date date = sdf.parse((String) objects[1]);
-                    news.setPublishTime(date);
-                    news.setUserName((String) objects[2]);
-                    news.setUserLink((String) objects[3]);
+            file = fileUtil.multipartFileToFile(csvFile);
+            Iterator<String[]> iterator = fileUtil.readCSVFile(file);
 
-                    //数据过长直接放弃存储
-                    String content = (String) objects[4];
-                    news.setContent(content.length() > 255 ? null : content);
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                    news.setSource((String) objects[5]);
-                    news.setLocationUrl((String) objects[6]);
-                    news.setLocationName((String) objects[7]);
+            //跳过标题栏
+            iterator.next();
+            while (iterator.hasNext()) {
+                Object[] objects = Arrays.stream(iterator.next()).toArray();
+                TyphoonData typhoonData = new TyphoonData();
+                Date date = sdf.parse((String) objects[1]);
+                typhoonData.setPublishTime(date);
+                typhoonData.setUserName((String) objects[2]);
+                typhoonData.setUserLink((String) objects[3]);
 
-                    //数据过长直接放弃存储
-                    String urls = (String) objects[8];
-                    news.setImageUrls(urls.length() > 255 ? null : urls);
+                //数据过长直接放弃存储
+                String content = (String) objects[4];
+                typhoonData.setContent(content.length() > 255 ? null : content);
 
-                    news.setWeiboLink((String) objects[9]);
-                    news.setForwardNum(Integer.parseInt((String) objects[10]));
-                    news.setCommentNum(Integer.parseInt((String) objects[11]));
-                    news.setLikeNum(Integer.parseInt((String) objects[12]));
+                typhoonData.setSource((String) objects[5]);
+                typhoonData.setLocationUrl((String) objects[6]);
+                typhoonData.setLocationName((String) objects[7]);
 
-                    typhoonNewsMapper.insert(news);
-                }
+                //数据过长直接放弃存储
+                String urls = (String) objects[8];
+                typhoonData.setImageUrls(urls.length() > 255 ? null : urls);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                typhoonData.setWeiboLink((String) objects[9]);
+                typhoonData.setForwardNum(Integer.parseInt((String) objects[10]));
+                typhoonData.setCommentNum(Integer.parseInt((String) objects[11]));
+                typhoonData.setLikeNum(Integer.parseInt((String) objects[12]));
+
+                typhoonDataMapper.insert(typhoonData);
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return new CommonResult();
@@ -103,55 +98,37 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
     @Override
     public CommonResult redExcel(MultipartFile excelFile) {
-        String originalFilename = excelFile.getOriginalFilename();
-        StringBuilder sb = new StringBuilder();
-        String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
 
-        if (fileSuffix.equals(EXCEL_2007) || fileSuffix.equals(EXCEL_2003)) {
-            ExcelListener excelListener = new ExcelListener();
-            try {
-                EasyExcel.read(excelFile.getInputStream(), excelListener).sheet().doRead();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            List<JSONObject> dataList = excelListener.getDataList();
-            for (JSONObject jsonObject : dataList) {
-                TyphoonData news = new TyphoonData();
-                news.setPublishTime(jsonObject.getDate("publish_time"));
-                news.setUserName(jsonObject.getString("user_name"));
-                news.setUserLink(jsonObject.getString("user_link"));
-                news.setContent(jsonObject.getString("content"));
-                news.setSource(jsonObject.getString("source"));
-                news.setLocationUrl(jsonObject.getString("locationUrl"));
-                news.setLocationName(jsonObject.getString("locationName"));
-                news.setImageUrls(jsonObject.getString("image_urls"));
-                news.setWeiboLink(jsonObject.getString("weibo_link"));
-                news.setForwardNum(jsonObject.getInteger("forward_num"));
-                news.setCommentNum(jsonObject.getInteger("comment_num"));
-                news.setLikeNum(jsonObject.getInteger("like_num"));
+        File file = null;
+        List<TyphoonData> dataList = null;
+        try {
+            file = fileUtil.multipartFileToFile(excelFile);
+            dataList = fileUtil.readExcelFile(file, TyphoonData.class);
 
-                typhoonNewsMapper.insert(news);
-            }
+            dataList.forEach(typhoonData -> typhoonDataMapper.insert(typhoonData));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+
         return null;
-    }
+}
 
     @Override
     public List<String> getTyphoonNameDataList() {
-        QueryWrapper wrapper=new QueryWrapper();
+        QueryWrapper wrapper = new QueryWrapper();
 
         wrapper.select("typhoon_name");
         wrapper.select("DISTINCT typhoon_name");
 
-        return typhoonNewsMapper.selectList(wrapper);
+        return typhoonDataMapper.selectList(wrapper);
     }
 
     @Override
     public List<TyphoonData> getTyphoonDataByName(String typhoonName) {
-        QueryWrapper wrapper=new QueryWrapper();
-        wrapper.eq("typhoon_name",typhoonName);
-        return typhoonNewsMapper.selectList(wrapper);
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("typhoon_name", typhoonName);
+        return typhoonDataMapper.selectList(wrapper);
     }
 }
 

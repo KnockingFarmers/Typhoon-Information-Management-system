@@ -1,12 +1,15 @@
 package com.xxx.common.util;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSONObject;
 import com.xxx.tphoon.fileOperation.exception.FileTypeException;
+import com.xxx.tphoon.fileOperation.lisenner.ExcelListener;
 import com.xxx.tphoon.fileOperation.service.CSVFileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @Author
@@ -35,7 +38,9 @@ public class FileUtil<T> {
 
     private CSVFileService csvFileService=new CSVFileService();
 
-//    private ExcelListener excelListener = new ExcelListener();
+    private ExcelListener excelListener = new ExcelListener();
+
+
 
     public File multipartFileToFile(MultipartFile file) throws Exception {
         File toFile = null;
@@ -68,6 +73,12 @@ public class FileUtil<T> {
     }
 
 
+    /**
+     * 读取csv文件
+     * @param csvFile
+     * @return
+     * @throws FileTypeException
+     */
     public Iterator<String[]> readCSVFile(File csvFile) throws FileTypeException {
         String originalFilename = csvFile.getName();
         StringBuilder sb = new StringBuilder();
@@ -76,6 +87,18 @@ public class FileUtil<T> {
         if (fileSuffix.equals(CSV)){
             Iterator<String[]> iterator = csvFileService.readCSV(csvFile);
             return iterator;
+        }else {
+            throw new FileTypeException();
+        }
+    }
+
+    public List<JSONObject> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
+        StringBuilder sb = new StringBuilder();
+        String fileSuffix = sb.substring(excelFile.getName().lastIndexOf("."));
+
+        if (fileSuffix.equals(EXCEL_2003)||fileSuffix.equals(EXCEL_2007)){
+            EasyExcel.read(excelFile,excelEntity, excelListener).sheet().doRead();
+            return excelListener.getDataList();
         }else {
             throw new FileTypeException();
         }
