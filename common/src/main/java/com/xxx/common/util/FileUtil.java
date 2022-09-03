@@ -24,17 +24,17 @@ public class FileUtil<T> {
     /**
      * Excel 2007+
      */
-    public static final String EXCEL_2007 = "xlsx";
+    public static final String EXCEL_2007 = ".xlsx";
 
     /**
      * Excel 2003
      */
-    private static final String EXCEL_2003 = "xls";
+    private static final String EXCEL_2003 = ".xls";
 
     /**
      * CSV
      */
-    private static final String CSV = "csv";
+    private static final String CSV = ".csv";
 
     private CSVFileService csvFileService=new CSVFileService();
 
@@ -81,7 +81,7 @@ public class FileUtil<T> {
      */
     public Iterator<String[]> readCSVFile(File csvFile) throws FileTypeException {
         String originalFilename = csvFile.getName();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(csvFile.getName());
         String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
 
         if (fileSuffix.equals(CSV)){
@@ -93,7 +93,7 @@ public class FileUtil<T> {
     }
 
     public List<JSONObject> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(excelFile.getName());
         String fileSuffix = sb.substring(excelFile.getName().lastIndexOf("."));
 
         if (fileSuffix.equals(EXCEL_2003)||fileSuffix.equals(EXCEL_2007)){

@@ -20,16 +20,18 @@ public interface TyphoonDataService extends IService<TyphoonData> {
     /**
      * 读取CSV文件并存入数据库
      * @param csvFile
+     * @param typhoonName
      * @return
      */
-    CommonResult readCSV(MultipartFile csvFile);
+    CommonResult readCSV(MultipartFile csvFile,String typhoonName);
 
     /**
      * 读取excel
      * @param excelFile
+     * @param typhoonName
      * @return
      */
-    CommonResult redExcel(MultipartFile excelFile);
+    CommonResult redExcel(MultipartFile excelFile,String typhoonName);
 
     /**
      * 获取数据库中都有哪些台风台风基本信息

@@ -29,9 +29,9 @@ public class TyphoonDataController {
     TyphoonDataService typhoonNewsService;
 
     @PostMapping("/readExcel")
-    @Async
-    public CommonResult readExcel(MultipartFile excelFile){
-        typhoonNewsService.redExcel(excelFile);
+//    @Async
+    public CommonResult readExcel(MultipartFile excelFile,String typhoonName){
+        typhoonNewsService.redExcel(excelFile,typhoonName);
         return null;
     }
 
