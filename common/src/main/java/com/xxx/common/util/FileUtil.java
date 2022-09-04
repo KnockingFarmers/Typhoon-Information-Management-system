@@ -16,7 +16,7 @@ import java.util.List;
  * @Date 2022/8/31 13:16
  * @PackageName:com.xxx.common.util
  * @ClassName: FileUtil
- * @Description: TODO
+ * @Description: 文件工具类
  * @Version 1.0
  */
 public class FileUtil<T> {
@@ -91,6 +91,7 @@ public class FileUtil<T> {
             throw new FileTypeException();
         }
     }
+
 
     public List<JSONObject> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
         StringBuilder sb = new StringBuilder(excelFile.getName());

@@ -29,15 +29,13 @@ public class TyphoonDataController {
     TyphoonDataService typhoonNewsService;
 
     @PostMapping("/readExcel")
-//    @Async
     public CommonResult readExcel(MultipartFile excelFile,String typhoonName){
         typhoonNewsService.redExcel(excelFile,typhoonName);
         return null;
     }
 
     @GetMapping("/getTyphoonNames")
-    @Async
-    public CommonResult getTyphoonNames(){
+    public CommonResult<List<String>> getTyphoonNames(){
         CommonResult<List<String>> result=new CommonResult<>();
         result.setData(typhoonNewsService.getTyphoonNameDataList());
         result.setCode(200);
@@ -46,7 +44,6 @@ public class TyphoonDataController {
     }
 
     @GetMapping("/getTyphoonDataByName")
-    @Async
     public CommonResult getTyphoonDataByName(String name){
         CommonResult<List<TyphoonData>> result=new CommonResult<>();
         result.setData(typhoonNewsService.getTyphoonDataByName(name));

@@ -10,6 +10,7 @@ import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -143,10 +144,9 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     public List<String> getTyphoonNameDataList() {
         QueryWrapper wrapper = new QueryWrapper();
 
-        wrapper.select("typhoon_name");
         wrapper.select("DISTINCT typhoon_name");
 
-        return typhoonDataMapper.selectList(wrapper);
+        return typhoonDataMapper.selectObjs(wrapper);
     }
 
     @Override
