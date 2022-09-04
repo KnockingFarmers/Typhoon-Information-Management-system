@@ -117,12 +117,13 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
                 //数据过长
                 typhoonData.setContent(StringUtils.truncate(jsonObject.getString("content"),255));
+
                 typhoonData.setSource(jsonObject.getString("source"));
                 typhoonData.setLocationUrl(jsonObject.getString("locationUrl"));
                 typhoonData.setLocationName(jsonObject.getString("locationName"));
 
-                //数据过长
                 typhoonData.setImageUrls(StringUtils.truncate(jsonObject.getString("imageUrls"),255));
+
                 typhoonData.setWeiboLink(jsonObject.getString("weiboLink"));
                 typhoonData.setForwardNum(jsonObject.getInteger("forwardNum"));
                 typhoonData.setCommentNum(jsonObject.getInteger("commentNum"));
