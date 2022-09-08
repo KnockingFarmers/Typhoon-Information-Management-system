@@ -1,6 +1,7 @@
 package com.xxx.common.util;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xxx.tphoon.fileOperation.exception.FileTypeException;
 import com.xxx.tphoon.fileOperation.lisenner.ExcelListener;
@@ -8,6 +9,9 @@ import com.xxx.tphoon.fileOperation.service.CSVFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -93,13 +97,41 @@ public class FileUtil<T> {
     }
 
 
-    public List<JSONObject> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
+    /**
+     * 读取excel文件
+     * @param excelFile
+     * @param excelEntity
+     * @return
+     * @throws FileTypeException
+     */
+    public List<T> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
         StringBuilder sb = new StringBuilder(excelFile.getName());
         String fileSuffix = sb.substring(excelFile.getName().lastIndexOf("."));
 
         if (fileSuffix.equals(EXCEL_2003)||fileSuffix.equals(EXCEL_2007)){
             EasyExcel.read(excelFile,excelEntity, excelListener).sheet().doRead();
-            return excelListener.getDataList();
+            List<JSONObject> dataList = excelListener.getDataList();
+
+            //拿到文件对象的所有属性
+            Field[] fields=excelEntity.getDeclaredFields();
+
+            List<T> excelObjectList=new ArrayList<>();
+
+            //循环遍历拿出数据
+                for (int j = 0; j < dataList.size(); j++) {
+
+                    for (int i = 0; i < fields.length; i++) {
+                        //打破封装 private
+                        fields[i].setAccessible(true);
+                    JSONObject jsonObject = dataList.get(i);
+
+
+                    T t=JSON.parseObject(JSON.toJSONString(jsonObject),excelEntity);
+                  excelObjectList.add(t);
+                }
+            }
+
+            return excelObjectList;
         }else {
             throw new FileTypeException();
         }

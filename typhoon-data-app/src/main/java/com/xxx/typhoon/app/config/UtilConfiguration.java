@@ -3,6 +3,7 @@ package com.xxx.typhoon.app.config;
 import com.xxx.common.util.FileUtil;
 import com.xxx.common.util.JwtUtil;
 import com.xxx.common.util.RedisUtil;
+import com.xxx.typhoon.app.entity.TyphoonData;
 import com.xxx.typhoon.app.entity.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,7 @@ public class UtilConfiguration {
     }
 
     @Bean
-    public FileUtil fileUtil(){
+    public FileUtil<TyphoonData> fileUtil(){
         return new FileUtil();
     }
 }

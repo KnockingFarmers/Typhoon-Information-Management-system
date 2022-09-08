@@ -6,10 +6,16 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.xxx.common.util.FileUtil;
+import com.xxx.tphoon.fileOperation.exception.FileTypeException;
+import com.xxx.typhoon.app.entity.TyphoonData;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @Author 甘龙
@@ -21,6 +27,9 @@ import java.util.Collections;
  */
 @SpringBootTest
 public class Test1 {
+
+    @Autowired
+    FileUtil<TyphoonData> fileUtil;
 
     @Test
     void test1() {
@@ -62,5 +71,17 @@ public class Test1 {
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();
 
+    }
+
+    @Test
+    void fileTest(){
+        File file=new File("C:\\Users\\GL\\Desktop\\台风海高斯登陆.xlsx");
+        try {
+            List<TyphoonData> typhoonData = fileUtil.readExcelFile(file, TyphoonData.class);
+
+        typhoonData.forEach(System.out::println);
+        } catch (FileTypeException e) {
+            e.printStackTrace();
+        }
     }
 }
