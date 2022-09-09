@@ -36,9 +36,6 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     TyphoonDataMapper typhoonDataMapper;
 
     @Autowired
-    FileUtil fileUtil;
-
-    @Autowired
     TyphoonDataService typhoonDataService;
 
     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -47,6 +44,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     @Override
     public CommonResult readCSV(MultipartFile csvFile,String typhoonName) {
 
+        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
         List<TyphoonData> insertList = new ArrayList<>();
         File file = null;
         try {
@@ -56,7 +54,6 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
             //读取完毕后删除文件
             file.delete();
-
 
             //跳过标题栏
             iterator.next();
@@ -99,8 +96,8 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     public CommonResult redExcel(MultipartFile excelFile,String typhoonName) {
 
         File file = null;
-        List<JSONObject> dataList = null;
-        List<TyphoonData> insertList=new ArrayList<>();;
+        List<TyphoonData> dataList = null;
+        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
         try {
             file = fileUtil.multipartFileToFile(excelFile);
             dataList = fileUtil.readExcelFile(file, TyphoonData.class);
@@ -108,35 +105,10 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
             //读取完毕后删除文件
             file.delete();
 
-            dataList.forEach(jsonObject -> {
-
-                TyphoonData typhoonData = new TyphoonData();
-                typhoonData.setPublishTime(new Date());
-                typhoonData.setUserName(jsonObject.getString("userName"));
-                typhoonData.setUserLink(jsonObject.getString("userLink"));
-
-                //数据过长
-                typhoonData.setContent(StringUtils.truncate(jsonObject.getString("content"),255));
-
-                typhoonData.setSource(jsonObject.getString("source"));
-                typhoonData.setLocationUrl(jsonObject.getString("locationUrl"));
-                typhoonData.setLocationName(jsonObject.getString("locationName"));
-
-                typhoonData.setImageUrls(StringUtils.truncate(jsonObject.getString("imageUrls"),255));
-
-                typhoonData.setWeiboLink(jsonObject.getString("weiboLink"));
-                typhoonData.setForwardNum(jsonObject.getInteger("forwardNum"));
-                typhoonData.setCommentNum(jsonObject.getInteger("commentNum"));
-                typhoonData.setLikeNum(jsonObject.getInteger("likeNum"));
-                typhoonData.setTyphoonName(typhoonName);
-                insertList.add(typhoonData);
-            });
-
-            typhoonDataService.saveBatch(insertList);
+            typhoonDataService.saveBatch(dataList);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return null;
 }

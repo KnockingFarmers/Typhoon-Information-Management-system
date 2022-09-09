@@ -3,18 +3,15 @@ package com.xxx.typhoon.app;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.xxx.common.util.FileUtil;
-import com.xxx.tphoon.fileOperation.exception.FileTypeException;
+import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.typhoon.app.entity.TyphoonData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,8 +25,8 @@ import java.util.List;
 @SpringBootTest
 public class Test1 {
 
-    @Autowired
-    FileUtil<TyphoonData> fileUtil;
+//    @Autowired
+//    FileUtil<TyphoonData> fileUtil;
 
     @Test
     void test1() {
@@ -75,12 +72,13 @@ public class Test1 {
 
     @Test
     void fileTest(){
+        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
         File file=new File("C:\\Users\\GL\\Desktop\\台风海高斯登陆.xlsx");
         try {
             List<TyphoonData> typhoonData = fileUtil.readExcelFile(file, TyphoonData.class);
 
         typhoonData.forEach(System.out::println);
-        } catch (FileTypeException e) {
+        } catch (FileCommonException e) {
             e.printStackTrace();
         }
     }

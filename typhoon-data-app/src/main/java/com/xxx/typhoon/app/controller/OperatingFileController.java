@@ -1,6 +1,8 @@
 package com.xxx.typhoon.app.controller;
 
 import com.xxx.common.result.CommonResult;
+import com.xxx.typhoon.app.service.TyphoonDataService;
+import com.xxx.typhoon.app.service.TyphoonNewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,18 +21,24 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/file")
 public class OperatingFileController {
 
+    @Autowired
+    TyphoonDataService dataService;
+
+    @Autowired
+    TyphoonNewsService newsService;
+
     private static final String TYPHOON_DATA_ENTITY="data";
     private static final String TYPHOON_NEWS_ENTITY="news";
 
     @PostMapping("/readExcelFileToDB")
-    public CommonResult readExcelFileToDB(MultipartFile excelFile,String entity){
+    public CommonResult readExcelFileToDB(MultipartFile excelFile,String entity,String typhoonName){
 
         CommonResult result=null;
 
         if (entity.equals(TYPHOON_DATA_ENTITY)) {
-
+           return dataService.redExcel(excelFile,typhoonName);
         }else if (entity.equals(TYPHOON_NEWS_ENTITY)){
-
+            return null;
         }
         return result;
     }

@@ -3,14 +3,13 @@ package com.xxx.common.util;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xxx.tphoon.fileOperation.exception.FileTypeException;
+import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.tphoon.fileOperation.lisenner.ExcelListener;
 import com.xxx.tphoon.fileOperation.service.CSVFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -81,9 +80,9 @@ public class FileUtil<T> {
      * 读取csv文件
      * @param csvFile
      * @return
-     * @throws FileTypeException
+     * @throws FileCommonException
      */
-    public Iterator<String[]> readCSVFile(File csvFile) throws FileTypeException {
+    public Iterator<String[]> readCSVFile(File csvFile) throws FileCommonException {
         String originalFilename = csvFile.getName();
         StringBuilder sb = new StringBuilder(csvFile.getName());
         String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
@@ -92,8 +91,9 @@ public class FileUtil<T> {
             Iterator<String[]> iterator = csvFileService.readCSV(csvFile);
             return iterator;
         }else {
-            throw new FileTypeException();
+            throw new FileCommonException();
         }
+
     }
 
 
@@ -102,9 +102,9 @@ public class FileUtil<T> {
      * @param excelFile
      * @param excelEntity
      * @return
-     * @throws FileTypeException
+     * @throws FileCommonException
      */
-    public List<T> readExcelFile(File excelFile,Class<T> excelEntity) throws FileTypeException {
+    public List<T> readExcelFile(File excelFile,Class<T> excelEntity) throws FileCommonException {
         StringBuilder sb = new StringBuilder(excelFile.getName());
         String fileSuffix = sb.substring(excelFile.getName().lastIndexOf("."));
 
@@ -133,7 +133,7 @@ public class FileUtil<T> {
 
             return excelObjectList;
         }else {
-            throw new FileTypeException();
+            throw new FileCommonException();
         }
     }
 

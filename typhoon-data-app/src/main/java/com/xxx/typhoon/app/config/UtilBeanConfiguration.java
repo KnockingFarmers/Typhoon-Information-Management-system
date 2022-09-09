@@ -1,9 +1,7 @@
 package com.xxx.typhoon.app.config;
 
-import com.xxx.common.util.FileUtil;
 import com.xxx.common.util.JwtUtil;
 import com.xxx.common.util.RedisUtil;
-import com.xxx.typhoon.app.entity.TyphoonData;
 import com.xxx.typhoon.app.entity.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2022/8/30 22:49
  * @PackageName:com.xxx.typhoon.app.config
  * @ClassName: UtilConfiguration
- * @Description: 把工具类加载到容器中
+ * @Description: 配置工具类
  * @Version 1.0
  */
 @Configuration
-public class UtilConfiguration {
+public class UtilBeanConfiguration {
 
     @Bean
     public JwtUtil<User> jwtUtil() {
@@ -29,8 +27,4 @@ public class UtilConfiguration {
         return new RedisUtil();
     }
 
-    @Bean
-    public FileUtil<TyphoonData> fileUtil(){
-        return new FileUtil();
-    }
 }
