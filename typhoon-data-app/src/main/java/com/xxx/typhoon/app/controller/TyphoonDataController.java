@@ -28,12 +28,6 @@ public class TyphoonDataController {
     @Autowired
     TyphoonDataService typhoonNewsService;
 
-    @PostMapping("/readExcel")
-    public CommonResult readExcel(MultipartFile excelFile,String typhoonName){
-        typhoonNewsService.redExcel(excelFile,typhoonName);
-        return null;
-    }
-
     @GetMapping("/getTyphoonNames")
     public CommonResult<List<String>> getTyphoonNames(){
         CommonResult<List<String>> result=new CommonResult<>();

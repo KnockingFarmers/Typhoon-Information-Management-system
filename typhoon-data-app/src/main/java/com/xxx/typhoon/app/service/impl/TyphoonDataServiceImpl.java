@@ -1,6 +1,5 @@
 package com.xxx.typhoon.app.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
@@ -8,9 +7,7 @@ import com.xxx.common.util.FileUtil;
 import com.xxx.typhoon.app.entity.TyphoonData;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,13 +35,13 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     @Autowired
     TyphoonDataService typhoonDataService;
 
-    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Transactional(rollbackFor = {Exception.class, IOException.class})
     @Override
-    public CommonResult readCSV(MultipartFile csvFile,String typhoonName) {
+    public CommonResult readCSV(MultipartFile csvFile, String typhoonName) {
 
-        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
+        FileUtil<TyphoonData> fileUtil = new FileUtil<>();
         List<TyphoonData> insertList = new ArrayList<>();
         File file = null;
         try {
@@ -93,25 +90,18 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
     @Transactional(rollbackFor = {Exception.class, IOException.class})
     @Override
-    public CommonResult redExcel(MultipartFile excelFile,String typhoonName) {
+    public CommonResult redExcel(File excelFile, String typhoonName) throws Exception {
 
-        File file = null;
         List<TyphoonData> dataList = null;
-        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
-        try {
-            file = fileUtil.multipartFileToFile(excelFile);
-            dataList = fileUtil.readExcelFile(file, TyphoonData.class);
+        FileUtil<TyphoonData> fileUtil = new FileUtil<>();
 
-            //读取完毕后删除文件
-            file.delete();
+        dataList = fileUtil.readExcelFile(excelFile, TyphoonData.class);
+        //读取完毕后删除文件
+        excelFile.delete();
 
-            typhoonDataService.saveBatch(dataList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        typhoonDataService.saveBatch(dataList);
         return null;
-}
+    }
 
     @Override
     public List<String> getTyphoonNameDataList() {

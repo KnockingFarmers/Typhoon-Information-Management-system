@@ -20,5 +20,5 @@ public interface UserService extends IService<User> {
      * @param password
      * @return
      */
-    CommonResult<User> login(String userName,String password);
+    User login(String userName,String password);
 }

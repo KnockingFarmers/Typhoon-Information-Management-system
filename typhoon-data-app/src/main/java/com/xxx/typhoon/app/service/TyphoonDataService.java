@@ -5,6 +5,7 @@ import com.xxx.typhoon.app.entity.TyphoonData;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -30,8 +31,9 @@ public interface TyphoonDataService extends IService<TyphoonData> {
      * @param excelFile
      * @param typhoonName
      * @return
+     * @throws Exception
      */
-    CommonResult redExcel(MultipartFile excelFile,String typhoonName);
+    CommonResult redExcel(File excelFile, String typhoonName) throws Exception;
 
     /**
      * 获取数据库中都有哪些台风台风基本信息

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.xxx.common.util.FileUtil;
 import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.typhoon.app.entity.TyphoonData;
+import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,9 @@ public class Test1 {
 
 //    @Autowired
 //    FileUtil<TyphoonData> fileUtil;
+
+    @Autowired
+    TyphoonDataService dataService;
 
     @Test
     void test1() {
@@ -71,13 +75,13 @@ public class Test1 {
     }
 
     @Test
-    void fileTest(){
-        FileUtil<TyphoonData> fileUtil=new FileUtil<>();
-        File file=new File("C:\\Users\\GL\\Desktop\\台风海高斯登陆.xlsx");
+    void fileTest() throws Exception {
+        FileUtil<TyphoonData> fileUtil = new FileUtil<>();
+        File file = new File("C:\\Users\\GL\\Desktop\\台风烟花登陆后.xlsx");
         try {
-            List<TyphoonData> typhoonData = fileUtil.readExcelFile(file, TyphoonData.class);
-
-        typhoonData.forEach(System.out::println);
+//            List<TyphoonData> typhoonData = fileUtil.readExcelFile(file, TyphoonData.class);
+//            typhoonData.forEach(System.out::println);
+            dataService.redExcel(file,"海高斯");
         } catch (FileCommonException e) {
             e.printStackTrace();
         }

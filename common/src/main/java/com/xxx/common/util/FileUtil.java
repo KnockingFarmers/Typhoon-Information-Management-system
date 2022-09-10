@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,6 +74,10 @@ public class FileUtil<T> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<File> splitFile(File file,long size){
+        return null;
     }
 
 

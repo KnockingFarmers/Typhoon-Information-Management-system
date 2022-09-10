@@ -24,7 +24,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public CommonResult<User> login(String userName,String password){
+    public User login(String userName,String password){
         return userService.login(userName,password);
     }
 

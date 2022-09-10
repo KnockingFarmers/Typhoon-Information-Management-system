@@ -23,4 +23,14 @@ public class CommonResult<T> {
     public CommonResult(Integer code, String message){
         this(code,message,null);
     }
+
+    public CommonResult(T data){
+        this.message="OK";
+        this.data=data;
+        this.code=200;
+    }
+
+    public static Object ok(Object data){
+        return new CommonResult<Object>(data);
+    }
 }
