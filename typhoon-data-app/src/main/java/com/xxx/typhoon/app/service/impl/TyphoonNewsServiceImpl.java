@@ -29,4 +29,19 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
     public CommonResult readExcelFileToDB(File excelFile) {
         return null;
     }
+
+    @Override
+    public CommonResult deleteTyphoonNews(Long newsId) {
+        return null;
+    }
+
+    @Override
+    public CommonResult updateTyphoonNews(TyphoonNews typhoonNews) {
+        return null;
+    }
+
+    @Override
+    public CommonResult getTyphoonNewsListByTyphoonName(String typhoonName) {
+        return null;
+    }
 }

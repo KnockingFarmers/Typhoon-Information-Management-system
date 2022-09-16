@@ -24,7 +24,7 @@ public interface TyphoonDataService extends IService<TyphoonData> {
      * @param typhoonName
      * @return
      */
-    CommonResult readCSV(MultipartFile csvFile,String typhoonName);
+    CommonResult readCSV(File csvFile,String typhoonName) throws Exception;
 
     /**
      * 读取excel
@@ -47,5 +47,21 @@ public interface TyphoonDataService extends IService<TyphoonData> {
      * @return
      */
     List<TyphoonData> getTyphoonDataByName(String typhoonName);
+
+    /**
+     * 删除台风数据
+     * @param dataId
+     * @return
+     */
+    CommonResult deleteTyphoonData(Long dataId);
+
+
+    /**
+     * 更新单个台风的数据
+     * @param typhoonData
+     * @return
+     */
+    CommonResult updateTyphoonData(TyphoonData typhoonData);
+
 
 }

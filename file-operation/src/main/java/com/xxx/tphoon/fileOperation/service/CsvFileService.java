@@ -11,11 +11,11 @@ import java.util.Iterator;
  * @Author 甘龙
  * @Date 2022/8/31 13:00
  * @PackageName:com.xxx.tphoon.fileOperation.service
- * @ClassName: CSVFileService
+ * @ClassName: CsvFileService
  * @Description: TODO
  * @Version 1.0
  */
-public class CSVFileService {
+public class CsvFileService {
 
     private static final String CHARSET="utf-8";
 

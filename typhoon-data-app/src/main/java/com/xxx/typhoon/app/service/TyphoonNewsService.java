@@ -31,4 +31,25 @@ public interface TyphoonNewsService extends IService<TyphoonNews> {
      */
     CommonResult readExcelFileToDB(File excelFile);
 
+    /**
+     * 删除台风新闻
+     * @param newsId
+     * @return
+     */
+    CommonResult deleteTyphoonNews(Long newsId);
+
+    /**
+     * 更新台风新闻数据
+     * @param typhoonNews
+     * @return
+     */
+    CommonResult updateTyphoonNews(TyphoonNews typhoonNews);
+
+    /**
+     * 根据台风名字获取台风新闻数据
+     * @param typhoonName
+     * @return
+     */
+    CommonResult getTyphoonNewsListByTyphoonName(String typhoonName);
+
 }

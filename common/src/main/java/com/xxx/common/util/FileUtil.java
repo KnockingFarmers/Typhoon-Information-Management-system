@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.tphoon.fileOperation.lisenner.ExcelListener;
-import com.xxx.tphoon.fileOperation.service.CSVFileService;
+import com.xxx.tphoon.fileOperation.service.CsvFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,11 +40,16 @@ public class FileUtil<T> {
      */
     private static final String CSV = ".csv";
 
-    private CSVFileService csvFileService=new CSVFileService();
+    private CsvFileService csvFileService=new CsvFileService();
 
     private ExcelListener excelListener = new ExcelListener();
 
 
+    public String getFileType(String fileName){
+        StringBuilder sb = new StringBuilder(fileName);
+        String fileSuffix = sb.substring(fileName.lastIndexOf("."));
+        return fileSuffix;
+    }
 
     public File multipartFileToFile(MultipartFile file) throws Exception {
         File toFile = null;
@@ -88,9 +93,8 @@ public class FileUtil<T> {
      * @throws FileCommonException
      */
     public Iterator<String[]> readCSVFile(File csvFile) throws FileCommonException {
-        String originalFilename = csvFile.getName();
-        StringBuilder sb = new StringBuilder(csvFile.getName());
-        String fileSuffix = sb.substring(originalFilename.lastIndexOf("."));
+
+        String fileSuffix = getFileType(csvFile.getName());
 
         if (fileSuffix.equals(CSV)){
             Iterator<String[]> iterator = csvFileService.readCSV(csvFile);
@@ -102,6 +106,7 @@ public class FileUtil<T> {
     }
 
 
+
     /**
      * 读取excel文件
      * @param excelFile
@@ -110,8 +115,8 @@ public class FileUtil<T> {
      * @throws FileCommonException
      */
     public List<T> readExcelFile(File excelFile,Class<T> excelEntity) throws FileCommonException {
-        StringBuilder sb = new StringBuilder(excelFile.getName());
-        String fileSuffix = sb.substring(excelFile.getName().lastIndexOf("."));
+
+        String fileSuffix = getFileType(excelFile.getName());
 
         if (fileSuffix.equals(EXCEL_2003)||fileSuffix.equals(EXCEL_2007)){
             EasyExcel.read(excelFile,excelEntity, excelListener).sheet().doRead();

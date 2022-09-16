@@ -5,8 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/VisualizationOfTyphoonData.iml" filepath="$PROJECT_DIR$/VisualizationOfTyphoonData.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/file-operation/file-operation.iml" filepath="$PROJECT_DIR$/file-operation/file-operation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/typhoon-data-auth/typhoom-data-auth.iml" filepath="$PROJECT_DIR$/typhoon-data-auth/typhoom-data-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/typhoon-data-app/typhoon-data-app.iml" filepath="$PROJECT_DIR$/typhoon-data-app/typhoon-data-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/typhoon-data-auth/typhoon-data-auth.iml" filepath="$PROJECT_DIR$/typhoon-data-auth/typhoon-data-auth.iml" />
     </modules>
   </component>
 </project>

@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxx.typhoon.app.mapper.TyphoonDataMapper">
 
+    <insert id="insertTyphoonDataBatch">
+        INSERT INTO typhoon_data(typhoon_data_id,publish_time,user_name,user_link,
+                                 content,`source`,location_url,location_name,image_urls,
+                                 weibo_link,forward_num,comment_num,like_num,typhoon_name)
+        VALUES
+        <foreach collection="dataList" item="item" separator=",">
+            (
+            #(item.typhoonDataId),#(item.publishTime),#(item.userName),
+            #(item.userLink),#(item.content),#(item.source),
+            #(item.locationUrl),#(item.locationName),#(item.imageUrls),
+            #(item.weiboLink),#(item.forwardNum),#(item.commentNum),
+            #(item.likeNum),#(item.typhoonName)
+            )
+        </foreach>
+    </insert>
 </mapper>

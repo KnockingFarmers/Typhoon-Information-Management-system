@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.xxx.common.util.FileUtil;
 import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.typhoon.app.entity.TyphoonData;
+import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class Test1 {
 
     @Autowired
     TyphoonDataService dataService;
+
+    @Autowired
+    TyphoonDataMapper dataMapper;
 
     @Test
     void test1() {
@@ -77,11 +81,24 @@ public class Test1 {
     @Test
     void fileTest() throws Exception {
         FileUtil<TyphoonData> fileUtil = new FileUtil<>();
-        File file = new File("C:\\Users\\GL\\Desktop\\台风烟花登陆后.xlsx");
+        File file = new File("C:\\Users\\GL\\Desktop\\台风黑格比登陆.xlsx");
         try {
 //            List<TyphoonData> typhoonData = fileUtil.readExcelFile(file, TyphoonData.class);
 //            typhoonData.forEach(System.out::println);
-            dataService.redExcel(file,"海高斯");
+            dataService.redExcel(file,"黑格比");
+        } catch (FileCommonException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    void fileTest2() throws Exception {
+        FileUtil<TyphoonData> fileUtil = new FileUtil<>();
+        File file = new File("D:\\兼职接单\\L2903\\资料\\台风数据集(1)\\台风数据集\\台风黑格比登陆.csv");
+        try {
+//
+            dataService.readCSV(file,"黑格比");
         } catch (FileCommonException e) {
             e.printStackTrace();
         }

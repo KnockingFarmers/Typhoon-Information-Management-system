@@ -13,11 +13,11 @@ spring:
 
   #配置数据库
   datasource:
-    url: jdbc:mysql://localhost:3306/typhoon?uesSSL=true&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/typhoon?uesSSL=true&useUnicode=true&characterEncoding=utf-8&rewriteBatchedStatements=true
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
-    #type: com.alibaba.druid.pool.DruidDataSource
+#    type: com.alibaba.druid.pool.DruidDataSource
     dbcp2:
       connection-init-sqls: SET NAMES utf8mb4
     type: org.apache.commons.dbcp2.BasicDataSource
@@ -27,7 +27,7 @@ spring:
 mybatis-plus:
   configuration:
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:/com/xxx/app/mapper/xml/*.xml
+  mapper-locations: classpath*:/com/xxx/typhoon/app/mapper/xml/*.xml
   type-aliases-package: com.xxx.app.entity
   global-config:
     db-config:

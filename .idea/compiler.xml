@@ -8,16 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="file-operation" />
+        <module name="typhoon-data-auth" />
         <module name="common" />
         <module name="typhoon-data-app" />
-        <module name="typhoom-data-auth" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common" target="8" />
       <module name="file-operation" target="8" />
-      <module name="typhoom-data-auth" target="8" />
       <module name="typhoon-data-app" target="1.8" />
+      <module name="typhoon-data-auth" target="8" />
       <module name="VisualizationOfTyphoonData" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -25,8 +25,8 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="common" options="-parameters" />
       <module name="file-operation" options="-parameters" />
-      <module name="typhoom-data-auth" options="-parameters" />
       <module name="typhoon-data-app" options="-parameters" />
+      <module name="typhoon-data-auth" options="-parameters" />
     </option>
   </component>
 </project>

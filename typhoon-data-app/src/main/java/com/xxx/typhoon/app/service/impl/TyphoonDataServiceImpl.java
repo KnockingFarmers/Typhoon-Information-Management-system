@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
 import com.xxx.typhoon.app.entity.TyphoonData;
+import com.xxx.typhoon.app.forkjoin.TyphoonDataTaskForkJoin;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -26,6 +30,7 @@ import java.util.*;
  * @since 2022-08-31
  */
 @Service
+@Slf4j
 public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, TyphoonData> implements TyphoonDataService {
 
 
@@ -39,18 +44,17 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
     @Transactional(rollbackFor = {Exception.class, IOException.class})
     @Override
-    public CommonResult readCSV(MultipartFile csvFile, String typhoonName) {
+    public CommonResult readCSV(File csvFile, String typhoonName) throws Exception {
 
         FileUtil<TyphoonData> fileUtil = new FileUtil<>();
+
         List<TyphoonData> insertList = new ArrayList<>();
-        File file = null;
         try {
 
-            file = fileUtil.multipartFileToFile(csvFile);
-            Iterator<String[]> iterator = fileUtil.readCSVFile(file);
+            Iterator<String[]> iterator = fileUtil.readCSVFile(csvFile);
 
             //读取完毕后删除文件
-            file.delete();
+            csvFile.delete();
 
             //跳过标题栏
             iterator.next();
@@ -77,10 +81,11 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
                 typhoonData.setCommentNum(Integer.parseInt((String) objects[11]));
                 typhoonData.setLikeNum(Integer.parseInt((String) objects[12]));
 
-                typhoonDataMapper.insert(typhoonData);
+                insertList.add(typhoonData);
             }
 
 
+            typhoonDataService.saveBatch(insertList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +93,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         return new CommonResult();
     }
 
-    @Transactional(rollbackFor = {Exception.class, IOException.class})
+//    @Transactional(rollbackFor = {Exception.class, IOException.class})
     @Override
     public CommonResult redExcel(File excelFile, String typhoonName) throws Exception {
 
@@ -97,9 +102,20 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
         dataList = fileUtil.readExcelFile(excelFile, TyphoonData.class);
         //读取完毕后删除文件
-        excelFile.delete();
+//        excelFile.delete();
 
-        typhoonDataService.saveBatch(dataList);
+        dataList.forEach(typhoonData -> {
+            typhoonData.setTyphoonName(typhoonName);
+        });
+
+        log.info("插入开始------>"+System.currentTimeMillis());
+
+        ForkJoinPool forkJoinPool=new ForkJoinPool();
+        forkJoinPool.submit(new TyphoonDataTaskForkJoin(dataList));
+        forkJoinPool.awaitTermination(2, TimeUnit.SECONDS);
+        forkJoinPool.shutdown();
+
+        log.info("插入结束------>"+System.currentTimeMillis());
         return null;
     }
 
@@ -117,6 +133,16 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("typhoon_name", typhoonName);
         return typhoonDataMapper.selectList(wrapper);
+    }
+
+    @Override
+    public CommonResult deleteTyphoonData(Long dataId) {
+        return null;
+    }
+
+    @Override
+    public CommonResult updateTyphoonData(TyphoonData typhoonData) {
+        return null;
     }
 }
 

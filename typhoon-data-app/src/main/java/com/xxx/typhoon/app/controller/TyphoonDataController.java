@@ -26,12 +26,12 @@ import java.util.List;
 public class TyphoonDataController {
 
     @Autowired
-    TyphoonDataService typhoonNewsService;
+    TyphoonDataService dataService;
 
     @GetMapping("/getTyphoonNames")
     public CommonResult<List<String>> getTyphoonNames(){
         CommonResult<List<String>> result=new CommonResult<>();
-        result.setData(typhoonNewsService.getTyphoonNameDataList());
+        result.setData(dataService.getTyphoonNameDataList());
         result.setCode(200);
         result.setMessage("获取成功");
         return result;
@@ -40,10 +40,21 @@ public class TyphoonDataController {
     @GetMapping("/getTyphoonDataByName")
     public CommonResult getTyphoonDataByName(String name){
         CommonResult<List<TyphoonData>> result=new CommonResult<>();
-        result.setData(typhoonNewsService.getTyphoonDataByName(name));
+        result.setData(dataService.getTyphoonDataByName(name));
         result.setCode(200);
         result.setMessage("获取成功");
         return result;
     }
+
+    @PostMapping("deleteTyphoonData")
+    public CommonResult deleteTyphoonData(String dataId){
+        return dataService.deleteTyphoonData(Long.valueOf(dataId));
+    }
+
+    @PostMapping("updateTyphoonData")
+    public CommonResult updateTyphoonData(TyphoonData typhoonData){
+        return dataService.updateTyphoonData(typhoonData);
+    }
+
 
 }
