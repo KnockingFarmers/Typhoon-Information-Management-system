@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
 import com.xxx.typhoon.app.entity.TyphoonData;
-import com.xxx.typhoon.app.forkjoin.TyphoonDataTaskForkJoin;
+import com.xxx.typhoon.app.forkjoin.TyphoonInsertTaskForkJoin;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,8 +36,6 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     @Autowired
     TyphoonDataMapper typhoonDataMapper;
 
-    @Autowired
-    TyphoonDataService typhoonDataService;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -85,7 +82,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
             }
 
 
-            typhoonDataService.saveBatch(insertList);
+//            typhoonDataService.saveBatch(insertList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,7 +90,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         return new CommonResult();
     }
 
-//    @Transactional(rollbackFor = {Exception.class, IOException.class})
+    @Transactional(rollbackFor = {Exception.class, IOException.class})
     @Override
     public CommonResult redExcel(File excelFile, String typhoonName) throws Exception {
 
@@ -111,7 +108,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         log.info("插入开始------>"+System.currentTimeMillis());
 
         ForkJoinPool forkJoinPool=new ForkJoinPool();
-        forkJoinPool.submit(new TyphoonDataTaskForkJoin(dataList));
+        forkJoinPool.submit(new TyphoonInsertTaskForkJoin(dataList,TyphoonData.class));
         forkJoinPool.awaitTermination(2, TimeUnit.SECONDS);
         forkJoinPool.shutdown();
 
