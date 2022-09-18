@@ -7,32 +7,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+
 /**
  * @Author 甘龙
  * @Date 2022/9/17 22:39
  * @PackageName:com.xxx.typhoon.app.controller
  * @ClassName: GetDataController
- * @Description: TODO
+ * @Description: 调用python端接口
  * @Version 1.0
  */
 @RestController
 @RequestMapping("/getData")
 public class GetDataController {
 
-    public static final String PYTHON_URL="http://CLOUD-PAYMENT-SERVICE";
+    public static final String TYPHOON_NEWS_URL="爬取台风新闻";
+    public static final String TYPHOON_DATA_URL="爬取台风数据";
 
     @Autowired
     private RestTemplate restTemplate;
 
     @PostMapping("/typhoonNewsData")
-    public CommonResult getNewsData(){
-        return null;
+    public File getNewsData(String typhoonName){
+        return restTemplate.postForObject(TYPHOON_NEWS_URL,typhoonName, File.class);
     }
 
     @PostMapping("/typhoonData")
-    public CommonResult getTyphoonData(){
+    public File getTyphoonData(String typhoonName){
 
-        return null;
+        return restTemplate.postForObject(TYPHOON_DATA_URL,typhoonName, File.class);
     }
 
 }

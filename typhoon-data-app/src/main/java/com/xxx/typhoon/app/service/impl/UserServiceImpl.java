@@ -10,6 +10,8 @@ import com.xxx.typhoon.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -44,5 +46,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         return user;
+    }
+
+    @Override
+    public Integer updatePassword(Long userId, String password) {
+        return null;
+    }
+
+    @Override
+    public Integer adminDeleteUser(Long userId) {
+        return null;
+    }
+
+    @Override
+    public List<User> getUserList(Long userId) {
+        return null;
+    }
+
+    @Override
+    public User getUserInfo(Long userId) {
+        return null;
+    }
+
+    @Override
+    public Integer adminUpdateUserAuth(Long userId) {
+        return null;
     }
 }

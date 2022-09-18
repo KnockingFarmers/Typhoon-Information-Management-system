@@ -108,7 +108,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         log.info("插入开始------>"+System.currentTimeMillis());
 
         ForkJoinPool forkJoinPool=new ForkJoinPool();
-        forkJoinPool.submit(new TyphoonInsertTaskForkJoin(dataList,TyphoonData.class));
+        forkJoinPool.submit(new TyphoonInsertTaskForkJoin(dataList,this));
         forkJoinPool.awaitTermination(2, TimeUnit.SECONDS);
         forkJoinPool.shutdown();
 

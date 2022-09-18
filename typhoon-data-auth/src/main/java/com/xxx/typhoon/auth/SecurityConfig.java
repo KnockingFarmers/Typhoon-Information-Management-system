@@ -27,9 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeHttpRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/管理员功能").hasRole("admin")
-                .antMatchers("/管理员功能").hasRole("admin")
-                .antMatchers("/管理员功能").hasRole("admin");
+                .antMatchers("/admin").hasRole("admin")
+                .antMatchers("/super_admin").hasRole("admin")
+                .antMatchers("/user").hasRole("user");
 
         //没有登录的用户跳转到登录页面
         http.formLogin();

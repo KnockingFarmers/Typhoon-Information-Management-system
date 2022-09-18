@@ -1,12 +1,12 @@
 package com.xxx.typhoon.app.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +34,7 @@ public class TyphoonNews implements Serializable {
 
     @TableField("publisher_name")
     @ExcelProperty("发布者昵称")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private String publisherName;
 
     @TableField("publisher_sex")
@@ -91,6 +92,10 @@ public class TyphoonNews implements Serializable {
     @TableField("original_news")
     @ExcelProperty("是否为原创微博")
     private Integer originalNews;
+
+    @Version
+    @TableField("version")
+    private Integer version;
 
 
 }
