@@ -1,7 +1,9 @@
 package com.xxx.typhoon.app.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,18 +17,23 @@ import org.springframework.context.annotation.Configuration;
  * @Version 1.0
  */
 @Configuration
-@MapperScan("com.xxx.typhoon.app.mapper")
 public class MybatisPlusConfiguration {
 
     /**
-     * 乐观锁插件
+     * MP配置
      * @return
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
+        //乐观锁插件
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+
+        //分页插件
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.xxx.typhoon.app;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @Version 1.0
  */
 @SpringBootApplication
+@MapperScan("com.xxx.typhoon.app.mapper")
 @EnableAsync
 public class VisualizationOfTyphoonDataApplication {
     public static void main(String[] args) {
