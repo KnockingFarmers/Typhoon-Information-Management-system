@@ -7,6 +7,7 @@ import com.xxx.common.util.RedisUtil;
 import com.xxx.typhoon.app.entity.User;
 import com.xxx.typhoon.app.mapper.UserMapper;
 import com.xxx.typhoon.app.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,11 +51,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Integer updatePassword(Long userId, String password) {
+        if (userId!=null&& StringUtils.isEmpty(password)) {
+
+        }
         return null;
     }
 
     @Override
     public Integer adminDeleteUser(Long userId) {
+        if (userId!=null) {
+            userMapper.deleteById(userId);
+        }
         return null;
     }
 
@@ -65,7 +72,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserInfo(Long userId) {
-        return null;
+        QueryWrapper wrapper=new QueryWrapper();
+        wrapper.eq("user_id",userId);
+        return userMapper.selectOne(wrapper);
     }
 
     @Override

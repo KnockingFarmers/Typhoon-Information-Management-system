@@ -9,6 +9,7 @@ import com.xxx.typhoon.app.forkjoin.TyphoonInsertTaskForkJoin;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
 import com.xxx.typhoon.app.service.TyphoonDataService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>
@@ -105,14 +108,14 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
             typhoonData.setTyphoonName(typhoonName);
         });
 
-        log.info("插入开始------>"+System.currentTimeMillis());
+        log.info("插入开始------>" + System.currentTimeMillis());
 
-        ForkJoinPool forkJoinPool=new ForkJoinPool();
-        forkJoinPool.submit(new TyphoonInsertTaskForkJoin(dataList,this));
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        forkJoinPool.submit(new TyphoonInsertTaskForkJoin(dataList, this));
         forkJoinPool.awaitTermination(2, TimeUnit.SECONDS);
         forkJoinPool.shutdown();
 
-        log.info("插入结束------>"+System.currentTimeMillis());
+        log.info("插入结束------>" + System.currentTimeMillis());
         return null;
     }
 
@@ -134,11 +137,34 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
 
     @Override
     public CommonResult deleteTyphoonData(Long dataId) {
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        try {
+            if (dataId!=null) {
+                typhoonDataMapper.deleteById(dataId);
+            }
+        } catch (Exception e) {
+
+        } finally {
+            lock.unlock();
+        }
         return null;
     }
 
     @Override
     public CommonResult updateTyphoonData(TyphoonData typhoonData) {
+
+        Lock lock = new ReentrantLock();
+        lock.lock();
+        try {
+            if (!StringUtils.isEmpty((CharSequence) typhoonData)) {
+                typhoonDataMapper.updateById(typhoonData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
         return null;
     }
 }
