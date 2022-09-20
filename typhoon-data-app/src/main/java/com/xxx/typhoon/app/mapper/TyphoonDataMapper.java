@@ -17,11 +17,5 @@ import java.util.List;
 @Mapper
 public interface TyphoonDataMapper extends BaseMapper<TyphoonData> {
 
-    /**
-     * 台风数据批量插入
-     * @param dataList
-     * @return
-     */
-    Integer insertTyphoonDataBatch(List<TyphoonData> dataList);
 
 }

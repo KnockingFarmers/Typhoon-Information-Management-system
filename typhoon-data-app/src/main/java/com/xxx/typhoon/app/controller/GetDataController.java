@@ -1,6 +1,7 @@
 package com.xxx.typhoon.app.controller;
 
 import com.xxx.common.result.CommonResult;
+import com.xxx.typhoon.app.service.GetDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,21 +22,13 @@ import java.io.File;
 @RequestMapping("/getData")
 public class GetDataController {
 
-    public static final String TYPHOON_NEWS_URL="爬取台风新闻";
-    public static final String TYPHOON_DATA_URL="爬取台风数据";
-
     @Autowired
-    private RestTemplate restTemplate;
+    GetDataService getDataService;
 
     @PostMapping("/typhoonNewsData")
-    public File getNewsData(String typhoonName){
-        return restTemplate.postForObject(TYPHOON_NEWS_URL,typhoonName, File.class);
+    public CommonResult getNewsData(String typhoonName){
+        return getDataService.getTyphoonData();
     }
 
-    @PostMapping("/typhoonData")
-    public File getTyphoonData(String typhoonName){
-
-        return restTemplate.postForObject(TYPHOON_DATA_URL,typhoonName, File.class);
-    }
 
 }

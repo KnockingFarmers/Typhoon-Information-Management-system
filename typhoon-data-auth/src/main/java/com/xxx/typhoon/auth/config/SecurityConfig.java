@@ -1,4 +1,4 @@
-package com.xxx.typhoon.auth;
+package com.xxx.typhoon.auth.config;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
