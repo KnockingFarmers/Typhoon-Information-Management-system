@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxx.common.result.CommonResult;
 import com.xxx.common.util.FileUtil;
+import com.xxx.common.util.RedisUtil;
 import com.xxx.typhoon.app.entity.TyphoonData;
 import com.xxx.typhoon.app.forkjoin.TyphoonInsertTaskForkJoin;
 import com.xxx.typhoon.app.mapper.TyphoonDataMapper;
@@ -39,6 +40,8 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     @Autowired
     TyphoonDataMapper typhoonDataMapper;
 
+    @Autowired
+    RedisUtil redisUtil;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -129,10 +132,23 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     }
 
     @Override
-    public List<TyphoonData> getTyphoonDataByName(String typhoonName) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("typhoon_name", typhoonName);
-        return typhoonDataMapper.selectList(wrapper);
+    public List getTyphoonDataByName(String typhoonName) {
+        List<Object> dataList=null;
+        if (StringUtils.isEmpty(typhoonName)) {
+            dataList= redisUtil.lGet(typhoonName, 0, -1);
+
+            if (dataList == null || dataList.size() <= 0) {
+                QueryWrapper wrapper = new QueryWrapper();
+                wrapper.eq("typhoon_name", typhoonName);
+                dataList = typhoonDataMapper.selectList(wrapper);
+
+                redisUtil.lSet(typhoonName, dataList);
+
+            }
+
+        }
+        return dataList;
+
     }
 
     @Override
