@@ -52,13 +52,15 @@ public class OperatingFileController {
     }
 
     @PostMapping("/readCSVFileToDB")
-    public CommonResult readCSVFileToDB(MultipartFile csvFile,String entity){
+    public CommonResult readCSVFileToDB(MultipartFile csvFile,String entity) throws Exception {
         CommonResult result=null;
-
+        FileUtil fileUtil=new FileUtil();
         if (entity.equals(TYPHOON_DATA_ENTITY)) {
+            dataService.readCSV(fileUtil.multipartFileToFile(csvFile),null);
 
         }else if (entity.equals(TYPHOON_NEWS_ENTITY)){
 
+            newsService.readExcelFileToDB(fileUtil.multipartFileToFile(csvFile));
         }
         return result;
     }

@@ -5,13 +5,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.tphoon.fileOperation.lisenner.ExcelListener;
-import com.xxx.tphoon.fileOperation.service.CsvFileService;
+import com.xxx.tphoon.fileOperation.service.impl.CsvFileServiceImpl;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class FileUtil<T> {
      */
     private static final String CSV = ".csv";
 
-    private CsvFileService csvFileService=new CsvFileService();
+    private CsvFileServiceImpl csvFileService=new CsvFileServiceImpl();
 
     private ExcelListener excelListener = new ExcelListener();
 
