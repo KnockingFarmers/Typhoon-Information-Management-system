@@ -2,11 +2,15 @@ package com.xxx.tphoon.fileOperation.service.impl;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.xxx.tphoon.fileOperation.annotation.CSVField;
 import com.xxx.tphoon.fileOperation.service.CsvFileService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @Author 甘龙
@@ -37,5 +41,19 @@ public class CsvFileServiceImpl implements CsvFileService {
         }
         return iterator;
     }
+
+    @Override
+    public List readCsv(File file, Class entity) {
+        Field[] declaredFields = entity.getDeclaredFields();
+        for (int i = 0; i < declaredFields.length; i++) {
+            CSVField annotation = declaredFields[i].getAnnotation(CSVField.class);
+            if (StringUtils.isEmpty(annotation.name())) {
+                String fieldValue=annotation.name();
+            }
+        }
+
+        return null;
+    }
+
 
 }

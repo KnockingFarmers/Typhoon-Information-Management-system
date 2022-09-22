@@ -53,7 +53,7 @@ public interface TyphoonDataService extends IService<TyphoonData> {
      * @param dataId
      * @return
      */
-    CommonResult deleteTyphoonData(Long dataId);
+    CommonResult deleteTyphoonData(Long dataId,String typhoonName);
 
 
     /**

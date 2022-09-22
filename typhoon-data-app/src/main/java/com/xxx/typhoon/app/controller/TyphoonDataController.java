@@ -47,8 +47,8 @@ public class TyphoonDataController {
     }
 
     @PostMapping("deleteTyphoonData")
-    public CommonResult deleteTyphoonData(String dataId){
-        return dataService.deleteTyphoonData(Long.valueOf(dataId));
+    public CommonResult deleteTyphoonData(String dataId,String typhoonName){
+        return dataService.deleteTyphoonData(Long.valueOf(dataId),typhoonName);
     }
 
     @PostMapping("updateTyphoonData")

@@ -1,5 +1,6 @@
 package com.xxx.typhoon.auth.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -49,5 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("123")
                 .password(new BCryptPasswordEncoder().encode("123")).roles();
+
+        auth.jdbcAuthentication()
+                .dataSource(new DruidDataSource())
+                .withUser("admin")
+                .password(new BCryptPasswordEncoder().encode("123")).roles("admin");
+
+
     }
 }

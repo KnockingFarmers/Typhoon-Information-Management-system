@@ -152,12 +152,17 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
     }
 
     @Override
-    public CommonResult deleteTyphoonData(Long dataId) {
+    public CommonResult deleteTyphoonData(Long dataId,String typhoonName) {
         Lock lock = new ReentrantLock();
         lock.lock();
         try {
+
             if (dataId!=null) {
+
+                redisUtil.del(typhoonName);
                 typhoonDataMapper.deleteById(dataId);
+                Thread.sleep(100);
+                redisUtil.del(typhoonName);
             }
         } catch (Exception e) {
 
