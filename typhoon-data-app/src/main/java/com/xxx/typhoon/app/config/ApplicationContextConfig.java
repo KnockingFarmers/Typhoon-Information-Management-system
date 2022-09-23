@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  * @Version 1.0
  */
 @Configuration
-public class ApplicationContextConfiguration {
+public class ApplicationContextConfig {
 
     @Bean
     public JwtUtil<User> jwtUtil() {
