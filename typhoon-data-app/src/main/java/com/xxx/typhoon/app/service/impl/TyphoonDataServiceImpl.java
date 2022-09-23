@@ -68,7 +68,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
                 typhoonData.setPublishTime(date);
                 typhoonData.setUserName((String) objects[2]);
                 typhoonData.setUserLink((String) objects[3]);
-
+                typhoonData.setTyphoonName(typhoonName);
                 //数据过长
                 typhoonData.setContent((String) objects[4]);
 
@@ -88,7 +88,14 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
             }
 
 
-//            typhoonDataService.saveBatch(insertList);
+            log.info("插入开始------>" + System.currentTimeMillis());
+
+            ForkJoinPool forkJoinPool = new ForkJoinPool();
+            forkJoinPool.submit(new TyphoonInsertTaskForkJoin(insertList, this));
+            forkJoinPool.awaitTermination(2, TimeUnit.SECONDS);
+            forkJoinPool.shutdown();
+
+            log.info("插入结束------>" + System.currentTimeMillis());
         } catch (Exception e) {
             e.printStackTrace();
         }
