@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>
@@ -50,19 +53,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Integer updatePassword(Long userId, String password) {
-        if (userId!=null&& StringUtils.isEmpty(password)) {
-
+    public Integer updatePassword(Long userId, String password,String token) {
+        User user = userMapper.selectById(userId);
+        Map map = jwtUtil.analyzeToken(token);
+        String id = (String) map.get("userId");
+        int result=0;
+        if (!user.equals(null)&&StringUtils.isEmpty(password)) {
+            Integer auth = (Integer) map.get("authority");
+            if (String.valueOf(userId).equals(id)||auth>=1){
+                    user.setPassword(password);
+                result= userMapper.updateById(user);
+                }
         }
-        return null;
+
+        return result;
     }
 
     @Override
-    public Integer adminDeleteUser(Long userId) {
-        if (userId!=null) {
-            userMapper.deleteById(userId);
+    public Integer adminDeleteUser(Long deleteUserId, Long actionUserId) {
+
+        int result =0;
+        if (!actionUserId.equals(null)) {
+            User user = userMapper.selectById(actionUserId);
+            if (!user.equals(null) && user.getAuthority() >= 1) {
+
+                Lock lock = new ReentrantLock();
+                lock.lock();
+                try {
+                    result= userMapper.deleteById(deleteUserId);
+                } catch (Exception e) {
+
+                } finally {
+                    lock.unlock();
+                }
+            }
         }
-        return null;
+
+        return result;
     }
 
     @Override
@@ -72,13 +99,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User getUserInfo(Long userId) {
-        QueryWrapper wrapper=new QueryWrapper();
-        wrapper.eq("user_id",userId);
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("user_id", userId);
         return userMapper.selectOne(wrapper);
     }
 
     @Override
-    public Integer adminUpdateUserAuth(Long userId) {
-        return null;
+    public Integer adminUpdateUserAuth(Long updateUserId, Long actionUserId) {
+
+        if (!actionUserId.equals(null)) {
+            User user = userMapper.selectById(actionUserId);
+            if (!user.equals(null) && user.getAuthority() >= 1) {
+                Lock lock = new ReentrantLock();
+                lock.lock();
+                try {
+
+                    user.setAuthority(1);
+                    return userMapper.updateById(user);
+
+                } catch (Exception e) {
+
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+        return 0;
     }
 }

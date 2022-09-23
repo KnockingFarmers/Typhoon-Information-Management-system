@@ -28,16 +28,18 @@ public interface UserService extends IService<User> {
      * 修改密码
      * @param userId
      * @param password
+     * @param token
      * @return
      */
-    Integer updatePassword(Long userId,String password);
+    Integer updatePassword(Long userId,String password,String token);
 
     /**
      * 管理员删除用户
-     * @param userId
+     * @param deleteUserId
+     * @param actionUserId
      * @return
      */
-    Integer adminDeleteUser(Long userId);
+    Integer  adminDeleteUser(Long deleteUserId,Long actionUserId);
 
     /**
      * 获取用户列表
@@ -55,8 +57,9 @@ public interface UserService extends IService<User> {
 
     /**
      * 修改用户权限
-     * @param userId
+     * @param updateUserId
+     * @param actionUserId
      * @return
      */
-    Integer adminUpdateUserAuth(Long userId);
+    Integer adminUpdateUserAuth(Long updateUserId,Long actionUserId);
 }

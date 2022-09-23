@@ -40,19 +40,19 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
-    public Integer login(String userId){
-        return userService.adminDeleteUser(Long.valueOf(userId));
+    @PostMapping("/admin/deleteUserById")
+    public Integer deleteUserById(String deleteUserId, String actionUserId){
+        return userService.adminDeleteUser(Long.valueOf(deleteUserId),Long.valueOf(actionUserId));
     }
 
     @PostMapping("/admin/updateUserAuth")
-    public Integer adminUpdateUserAuth(String userId){
-        return userService.adminUpdateUserAuth(Long.valueOf(userId));
+    public Integer adminUpdateUserAuth(String updateUserId, String actionUserId){
+        return userService.adminUpdateUserAuth(Long.valueOf(updateUserId),Long.valueOf(actionUserId));
     }
 
     @PostMapping("/updatePassword")
-    public Integer updatePassword(String userId,String password){
-        return userService.updatePassword(Long.valueOf(userId),password);
+    public Integer updatePassword(String userId,String password,String token){
+        return userService.updatePassword(Long.valueOf(userId),password,token);
     }
 
 

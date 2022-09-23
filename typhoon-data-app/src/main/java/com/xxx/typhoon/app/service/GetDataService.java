@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @Version 1.0
  */
 @Service
-@FeignClient(value ="爬取台风新闻" )
+@FeignClient(value = "爬取台风新闻")
 public interface GetDataService {
 
     /**
      * 调用python 获取台风数据
+     *
      * @return
      */
     @GetMapping("get")
-     CommonResult getTyphoonData();
+    CommonResult getTyphoonData();
 }

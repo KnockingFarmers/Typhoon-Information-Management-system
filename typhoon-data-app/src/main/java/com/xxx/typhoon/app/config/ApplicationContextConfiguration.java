@@ -18,12 +18,6 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class ApplicationContextConfiguration {
 
-
-    @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
-
     @Bean
     public JwtUtil<User> jwtUtil() {
         return new JwtUtil();
