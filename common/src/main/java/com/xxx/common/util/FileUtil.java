@@ -10,7 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -91,13 +93,22 @@ public class FileUtil<T> {
      * @return
      * @throws FileCommonException
      */
-    public Iterator<String[]> readCSVFile(File csvFile) throws FileCommonException {
+    public List<T> readCSVFile(File csvFile,Class<T> toEntity) throws FileCommonException {
 
         String fileSuffix = getFileType(csvFile.getName());
 
         if (fileSuffix.equals(CSV)){
-            Iterator<String[]> iterator = csvFileService.readCSV(csvFile);
-            return iterator;
+            Iterator<JSONObject> iterator = csvFileService.readCSV(csvFile);
+            List<T> objects = new ArrayList<>();
+            //跳过标题栏
+            iterator.next();
+            Field[] entityFields = toEntity.getDeclaredFields();
+            while (iterator.hasNext()){
+                JSONObject jsonObject = iterator.next();
+                T t=JSON.parseObject(JSON.toJSONString(jsonObject),toEntity);
+                objects.add(t);
+            }
+            return objects;
         }else {
             throw new FileCommonException();
         }
@@ -121,23 +132,16 @@ public class FileUtil<T> {
             EasyExcel.read(excelFile,excelEntity, excelListener).sheet().doRead();
             List<JSONObject> dataList = excelListener.getDataList();
 
-            //拿到文件对象的所有属性
-            Field[] fields=excelEntity.getDeclaredFields();
-
             List<T> excelObjectList=new ArrayList<>();
 
             //循环遍历拿出数据
-                for (int j = 0; j < dataList.size(); j++) {
+                for (int i = 0; i < dataList.size(); i++) {
 
-                    for (int i = 0; i < fields.length; i++) {
-                        //打破封装 private
-                        fields[i].setAccessible(true);
                     JSONObject jsonObject = dataList.get(i);
 
-
-                    T t=JSON.parseObject(JSON.toJSONString(jsonObject),excelEntity);
+                  T t=JSON.parseObject(JSON.toJSONString(jsonObject),excelEntity);
                   excelObjectList.add(t);
-                }
+
             }
 
             return excelObjectList;

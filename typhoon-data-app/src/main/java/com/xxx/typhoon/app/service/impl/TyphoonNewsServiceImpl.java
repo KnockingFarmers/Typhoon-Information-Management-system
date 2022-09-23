@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,7 +35,10 @@ public class TyphoonNewsServiceImpl extends ServiceImpl<TyphoonNewsMapper, Typho
     TyphoonNewsMapper newsMapper;
 
     @Override
-    public CommonResult readCVSFileToDB(File cVSFile) {
+    public CommonResult readCVSFileToDB(File csvFile) throws FileCommonException {
+
+        FileUtil fileUtil=new FileUtil();
+//        Iterator iterator = fileUtil.readCSVFile(csvFile);
         return null;
     }
 

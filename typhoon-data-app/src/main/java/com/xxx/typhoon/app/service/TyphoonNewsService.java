@@ -1,6 +1,7 @@
 package com.xxx.typhoon.app.service;
 
 import com.xxx.common.result.CommonResult;
+import com.xxx.tphoon.fileOperation.exception.FileCommonException;
 import com.xxx.typhoon.app.entity.TyphoonNews;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,7 +22,7 @@ public interface TyphoonNewsService extends IService<TyphoonNews> {
      * @param cVSFile
      * @return
      */
-    CommonResult readCVSFileToDB(File cVSFile);
+    CommonResult readCVSFileToDB(File csvFile) throws FileCommonException;
 
 
     /**

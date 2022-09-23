@@ -52,41 +52,13 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         FileUtil<TyphoonData> fileUtil = new FileUtil<>();
 
         List<TyphoonData> insertList = new ArrayList<>();
-        try {
 
-            Iterator<String[]> iterator = fileUtil.readCSVFile(csvFile);
+
+            List<TyphoonData> dataList = fileUtil.readCSVFile(csvFile, TyphoonData.class);
 
             //读取完毕后删除文件
-            csvFile.delete();
-
-            //跳过标题栏
-            iterator.next();
-            while (iterator.hasNext()) {
-                Object[] objects = Arrays.stream(iterator.next()).toArray();
-                TyphoonData typhoonData = new TyphoonData();
-                Date date = sdf.parse((String) objects[1]);
-                typhoonData.setPublishTime(date);
-                typhoonData.setUserName((String) objects[2]);
-                typhoonData.setUserLink((String) objects[3]);
-                typhoonData.setTyphoonName(typhoonName);
-                //数据过长
-                typhoonData.setContent((String) objects[4]);
-
-                typhoonData.setSource((String) objects[5]);
-                typhoonData.setLocationUrl((String) objects[6]);
-                typhoonData.setLocationName((String) objects[7]);
-
-                //数据过长
-                typhoonData.setImageUrls((String) objects[8]);
-
-                typhoonData.setWeiboLink((String) objects[9]);
-                typhoonData.setForwardNum(Integer.parseInt((String) objects[10]));
-                typhoonData.setCommentNum(Integer.parseInt((String) objects[11]));
-                typhoonData.setLikeNum(Integer.parseInt((String) objects[12]));
-
-                insertList.add(typhoonData);
-            }
-
+//            csvFile.delete();
+            dataList.forEach(typhoonData -> typhoonData.setTyphoonName(typhoonName));
 
             log.info("插入开始------>" + System.currentTimeMillis());
 
@@ -96,9 +68,6 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
             forkJoinPool.shutdown();
 
             log.info("插入结束------>" + System.currentTimeMillis());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         return new CommonResult();
     }
@@ -114,9 +83,7 @@ public class TyphoonDataServiceImpl extends ServiceImpl<TyphoonDataMapper, Typho
         //读取完毕后删除文件
 //        excelFile.delete();
 
-        dataList.forEach(typhoonData -> {
-            typhoonData.setTyphoonName(typhoonName);
-        });
+        dataList.forEach(typhoonData -> typhoonData.setTyphoonName(typhoonName));
 
         log.info("插入开始------>" + System.currentTimeMillis());
 
