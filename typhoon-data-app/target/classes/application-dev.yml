@@ -17,10 +17,10 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.jdbc.Driver
-#    type: com.alibaba.druid.pool.DruidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
     dbcp2:
       connection-init-sqls: SET NAMES utf8mb4
-    type: org.apache.commons.dbcp2.BasicDataSource
+#    type: org.apache.commons.dbcp2.BasicDataSource
 
 
 #MP配置：逻辑删除，日志等

@@ -16,5 +16,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CSVField {
 
-     String name() default "";
+     String value() default "";
 }

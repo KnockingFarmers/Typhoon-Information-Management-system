@@ -46,6 +46,7 @@ buildNumber.properties
 .idea/encodings.xml
 .idea/modules.xml
 *.iml
+*/target/*
 #=======================================================================================================================
 #==============================               other环境忽略文件                           ================================
 #=====================         https://github.com/github/gitignore/blob/master/Maven.gitignore        ==================

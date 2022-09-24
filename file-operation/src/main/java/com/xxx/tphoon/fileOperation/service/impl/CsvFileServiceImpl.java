@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -22,17 +23,17 @@ import java.util.List;
  */
 public class CsvFileServiceImpl implements CsvFileService {
 
-    private static final String CHARSET="utf-8";
+    private static final String CHARSET = "utf-8";
 
 
     @Override
-    public Iterator readCSV(File file){
+    public Iterator readCSV(File file) {
 
-        Iterator<String[]> iterator=null;
+        Iterator<String[]> iterator = null;
         try {
-            CSVReader csvReader=new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file),CHARSET))).build();
+            CSVReader csvReader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), CHARSET))).build();
 
-            iterator=csvReader.iterator();
+            iterator = csvReader.iterator();
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -45,16 +46,48 @@ public class CsvFileServiceImpl implements CsvFileService {
     }
 
     @Override
-    public List readCsv(File file, Class entity) {
+    public List readCsv(File file, Class entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException {
         Field[] declaredFields = entity.getDeclaredFields();
+
+        CSVReader csvReader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), CHARSET))).build();
+
+        //读取文件后的值
+        Iterator<String[]> iterator = csvReader.iterator();
+
+        //标题栏
+        String[] titles = iterator.next();
+
+        List csvObjects=new ArrayList();
+        //循环读取实体类中哪个属性使用了注解
         for (int i = 0; i < declaredFields.length; i++) {
             CSVField annotation = declaredFields[i].getAnnotation(CSVField.class);
-            if (StringUtils.isEmpty(annotation.name())) {
-                String fieldValue=annotation.name();
+
+            if (annotation!=null&&!StringUtils.isEmpty(annotation.value())) {
+                //如果该注解的值不是空的则遍历向属性赋值
+                while (iterator.hasNext()) {
+                    //拿到每一行的数据
+                    String[] fileValues = iterator.next();
+
+                    Class<? extends Class> aClass = entity.getClass();
+                    //循环赋值
+                    for (int j = 0; j < titles.length; j++) {
+                        if (annotation.value().equals(titles[j])) {
+
+                            try {
+                                declaredFields[i].setAccessible(true);
+                                declaredFields[i].set(aClass, fileValues[j]);
+                            }catch (Exception e){
+                                continue;
+                            }
+                        }
+                    }
+
+                    csvObjects.add(aClass);
+                }
             }
         }
 
-        return null;
+        return csvObjects;
     }
 
 

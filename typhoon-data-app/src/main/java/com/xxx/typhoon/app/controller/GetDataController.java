@@ -22,13 +22,13 @@ import java.io.File;
 @RequestMapping("/getData")
 public class GetDataController {
 
-    @Autowired
-    GetDataService getDataService;
-
-    @PostMapping("/typhoonNewsData")
-    public CommonResult getNewsData(String typhoonName){
-        return getDataService.getTyphoonData();
-    }
+//    @Autowired
+//    GetDataService getDataService;
+//
+//    @PostMapping("/typhoonNewsData")
+//    public CommonResult getNewsData(String typhoonName){
+//        return getDataService.getTyphoonData();
+//    }
 
 
 }

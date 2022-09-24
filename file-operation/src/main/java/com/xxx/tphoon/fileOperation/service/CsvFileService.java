@@ -1,6 +1,8 @@
 package com.xxx.tphoon.fileOperation.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,5 +29,5 @@ public interface CsvFileService<T> {
      * @param entity
      * @return
      */
-     List<T> readCsv(File file,Class entity);
+     List<T> readCsv(File file,Class<T> entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException;
 }

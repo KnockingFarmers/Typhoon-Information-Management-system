@@ -1,7 +1,7 @@
 package com.xxx.typhoon.app.service;
 
 import com.xxx.common.result.CommonResult;
-import org.springframework.cloud.openfeign.FeignClient;
+//import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @Version 1.0
  */
 @Service
-@FeignClient(value = "爬取台风新闻")
+//@FeignClient(value = "爬取台风新闻")
 public interface GetDataService {
 
     /**
