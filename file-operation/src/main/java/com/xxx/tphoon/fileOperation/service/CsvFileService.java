@@ -29,5 +29,5 @@ public interface CsvFileService<T> {
      * @param entity
      * @return
      */
-     List<T> readCsv(File file,Class<T> entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException;
+     List<T> readCsv(File file,Class<T> entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException, InstantiationException;
 }

@@ -46,7 +46,7 @@ public class CsvFileServiceImpl implements CsvFileService {
     }
 
     @Override
-    public List readCsv(File file, Class entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException {
+    public List readCsv(File file, Class entity) throws FileNotFoundException, UnsupportedEncodingException, IllegalAccessException, InstantiationException {
         Field[] declaredFields = entity.getDeclaredFields();
 
         CSVReader csvReader = new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), CHARSET))).build();
@@ -57,35 +57,38 @@ public class CsvFileServiceImpl implements CsvFileService {
         //标题栏
         String[] titles = iterator.next();
 
-        List csvObjects=new ArrayList();
-        //循环读取实体类中哪个属性使用了注解
-        for (int i = 0; i < declaredFields.length; i++) {
-            CSVField annotation = declaredFields[i].getAnnotation(CSVField.class);
+        List csvObjects = new ArrayList();
 
-            if (annotation!=null&&!StringUtils.isEmpty(annotation.value())) {
-                //如果该注解的值不是空的则遍历向属性赋值
-                while (iterator.hasNext()) {
+        while (iterator.hasNext()) {
+
+
+            //循环读取实体类中哪个属性使用了注解
+            for (Field field : declaredFields) {
+                CSVField annotation = field.getAnnotation(CSVField.class);
+                Object o = entity.newInstance();
+
+                if (annotation != null && !StringUtils.isEmpty(annotation.value())) {
+                    //如果该注解的值不是空的则遍历向属性赋值
+
                     //拿到每一行的数据
-                    String[] fileValues = iterator.next();
+                    String[] filedValues = iterator.next();
 
-                    Class<? extends Class> aClass = entity.getClass();
+
                     //循环赋值
-                    for (int j = 0; j < titles.length; j++) {
-                        if (annotation.value().equals(titles[j])) {
+                    for (int i = 0; i < filedValues.length; i++) {
+                        if (annotation.value().equals(titles[i])) {
 
-                            try {
-                                declaredFields[i].setAccessible(true);
-                                declaredFields[i].set(aClass, fileValues[j]);
-                            }catch (Exception e){
-                                continue;
-                            }
+                            field.setAccessible(true);
+                            field.set(o, filedValues[i]);
                         }
-                    }
 
-                    csvObjects.add(aClass);
+
+                        csvObjects.add(o);
+                    }
                 }
             }
         }
+
 
         return csvObjects;
     }
